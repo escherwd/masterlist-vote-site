@@ -1,0 +1,29 @@
+body {
+    @apply bg-zinc-900 text-white/80;
+}
+
+.card-label {
+    @apply text-xs text-primary mb-[3px] tracking-wider;
+}
+
+.ellipsis {
+    @apply overflow-hidden text-ellipsis whitespace-nowrap;
+}
+
+.divider {
+    @apply h-px w-full border-b border-dashed border-zinc-600;
+}
+
+.button {
+    @apply px-2 py-2 justify-center flex items-center transition text-sm font-bold tracking-wide whitespace-nowrap uppercase;
+
+    > span {
+        @apply mx-0.5;
+    }
+
+    > svg {
+        width: 18px;
+        height: 18px;
+        @apply mx-0.5;
+    }
+}
