@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\Season;
 use App\Models\Submission;
 use App\Models\User;
+use App\Models\Vote;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -77,7 +78,11 @@ class RefreshSubmissions extends Command
             });
         }
 
-        // Clean up deleted tracks
+        // Clean up uneccesray votes
+        foreach ($existingIds as $key => $track_id) {
+            Vote::where('submission_id', $track_id)->delete();
+        }
+        // Delete the tracks
         Submission::whereIn('id', $existingIds)->delete();
     }
 }

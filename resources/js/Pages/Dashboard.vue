@@ -124,7 +124,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import Track from '@/Components/Track.vue';
 import { computed, onBeforeMount, ref } from 'vue';
 import { ArrowPathIcon, CheckIcon } from "@heroicons/vue/20/solid"
@@ -180,6 +180,7 @@ function refreshTracks() {
         preserveScroll: true,
         onFinish: () => {
             isRefreshing.value = false;
+            router.reload();
         },
     });
 }
@@ -192,9 +193,10 @@ const leaderboard = computed(() => {
         .splice(0, 5) // just take the top 5
         .map((k) => {
             var t = props.submissions.filter(t => t.id == k)[0]
+            if (!t) return null;
             t['votes'] = votes.value[k].length
             return t
-        })
+        }).filter(k => k != null);
     return top;
 })
 
@@ -226,6 +228,7 @@ const accepted_songs_count = computed(() => {
 })
 
 const bangers_count = computed(() => {
+    if (vote_max == 0) return 0;
     return Object.keys(votes.value).filter(t_id => votes.value[t_id].length >= vote_max).length
 })
 

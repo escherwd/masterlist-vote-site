@@ -43,8 +43,12 @@ import { Link } from '@inertiajs/vue3';
         </div>
 
         <!-- Footer -->
-        <div class="py-8 text-zinc-400">
-            Footer
+        <div class="pt-6 mt-8 mb-12 border-t border-zinc-600 border-dashed">
+            <div class="mb-3 text-white/50 text-xs uppercase tracking-widest">Sponsored By</div>
+            <div class="flex gap-4">
+                <img src="/images/eschertalks_logo.png" class="h-8" alt="escherTalks">
+                <img src="/images/bruhcraft_logo.png" class="h-8" alt="escherTalks">
+            </div>
         </div>
     </div>
 </template>
