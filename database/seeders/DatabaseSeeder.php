@@ -40,13 +40,13 @@ class DatabaseSeeder extends Seeder
             "group_id" => Group::first()->id,
         ]);
 
-        Episode::factory(5)->create([
+        $episodes = Episode::factory(5)->create([
             "season_id" => Season::first()->id,
         ]);
 
         // Fetch real spotify data
         Artisan::call('app:refresh-submissions', [
-            "group-id" => $group->id,
+            "episode_id" => $episodes[4]->id,
         ]);
 
         // \App\Models\User::factory(10)->create();
