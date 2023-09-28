@@ -180,7 +180,7 @@ function refreshTracks() {
         preserveScroll: true,
         onFinish: () => {
             isRefreshing.value = false;
-            router.reload();
+            location.reload();
         },
     });
 }

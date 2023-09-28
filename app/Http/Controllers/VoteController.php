@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,6 +23,12 @@ class VoteController extends Controller
         $user = Auth::user();
 
         if ($is_voted) {
+            // Prevent multiple voting
+            $vote_count = Vote::where([
+                "user_id" => $user->id,
+                "submission_id" => $submission_id
+            ])->count();
+            if ($vote_count > 0) return;
             $user->votes()->attach($submission_id);
         } else {
             $user->votes()->detach($submission_id);
