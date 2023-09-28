@@ -12,7 +12,7 @@
                 <template v-for="track in submissions">
                     <Track :track="track" :vote_count="votes[track.id]?.length ?? 0" :vote_max="vote_max"
                         :vote_threshold="episode.vote_min" :disable_vote="track.added_by == user.spotify_id"
-                        :voted="(votes[track.id] ?? []).includes(1)" :user="user_for(track.added_by)" @vote="vote" />
+                        :voted="(votes[track.id] ?? []).includes(user.id)" :user="user_for(track.added_by)" @vote="vote" />
                 </template>
                 <div v-if="submissions.length == 0" class="text-center py-8 text-white/40 uppercase text-sm tracking-wider">
                     <FaceFrownIcon :class="{ 'animate-pulse': isRefreshing }" class="h-6 w-6 mx-auto" />
@@ -20,7 +20,7 @@
                     <button @click="refreshTracks" class="block mt-2 uppercase text-xs tracking-wide font-medium hover:text-white mx-auto">Refresh Tracks</button>
                 </div>
             </div>
-            <div class="flex-grow-0 min-w-0 flex-shrink-0 md:w-64 ">
+            <div class="flex-grow-0 min-w-0 flex-shrink-0 w-full md:w-64 ">
                 <div class="grid grid-cols-2 gap-2">
                     <div class="bg-zinc-800 py-3 px-4 col-span-2">
                         <div class="card-label">JURY</div>
