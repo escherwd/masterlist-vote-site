@@ -14,7 +14,7 @@ class FinishEpisode extends Command
      *
      * @var string
      */
-    protected $signature = 'app:finish-episode {$episode_id}';
+    protected $signature = 'app:finish-episode {episode_id}';
 
     /**
      * The console command description.
@@ -38,6 +38,9 @@ class FinishEpisode extends Command
         $members = $group->users;
 
         $pass_threshold = $episode->vote_min;
+        $banger_threshold = count($members);
+
+        dd($pass_threshold, $members);
 
 
         // Add songs to master list

@@ -30,6 +30,7 @@ class DashboardController extends Controller
         /** @var Submission[] */
         $submissions = $episode->submissions()->orderBy('order', 'asc')->get();
 
+
         return Inertia::render('Dashboard', [
             "group" => $group,
             "group_users" => $group_users,

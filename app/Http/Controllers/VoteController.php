@@ -23,13 +23,8 @@ class VoteController extends Controller
         $user = Auth::user();
 
         if ($is_voted) {
-            // Prevent multiple voting
-            $vote_count = Vote::where([
-                "user_id" => $user->id,
-                "submission_id" => $submission_id
-            ])->count();
-            if ($vote_count > 0) return;
-            $user->votes()->attach($submission_id);
+            // Sync will prevent duplicates, unlike attach
+            $user->votes()->sync($submission_id, false);
         } else {
             $user->votes()->detach($submission_id);
         }

@@ -23,4 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth')->prefix('api')->group(function () {
     Route::post('/vote', [VoteController::class, 'store'])->name('vote.store');
     Route::post('/episode/{id}/refresh', [EpisodeController::class, 'refreshTracks'])->name('episode.refresh');
+    Route::post('/episode/{id}/finish', [EpisodeController::class, 'finishEpisode'])->name('episode.finish');
 });

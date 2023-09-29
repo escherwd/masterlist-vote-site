@@ -34,7 +34,7 @@ class SpotifyLoginController extends Controller {
         Auth::login($user);
 
         // Attach to first group for now
-        Group::first()->users()->attach($user);
+        Group::first()->users()->sync($user, false);
 
         return redirect('/');
     }

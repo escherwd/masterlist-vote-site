@@ -4,7 +4,7 @@
 
     <AuthenticatedLayout>
 
-        <FinishEpisodeModal v-if="showFinishEpisodeModal"
+        <FinishEpisodeModal v-if="showFinishEpisodeModal" :episode="props.episode" 
             :counts="[accepted_songs_count, bangers_count, submissions.length]" @close="showFinishEpisodeModal = false" />
 
         <div class="flex flex-col md:flex-row items-start gap-x-4 w-full relative gap-y-12">
@@ -124,9 +124,9 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router, useForm, usePage } from '@inertiajs/vue3';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
 import Track from '@/Components/Track.vue';
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { ArrowPathIcon, CheckIcon } from "@heroicons/vue/20/solid"
 import { FaceFrownIcon } from '@heroicons/vue/24/solid'
 import FinishEpisodeModal from "@/Components/FinishEpisodeModal.vue";
@@ -180,7 +180,7 @@ function refreshTracks() {
         preserveScroll: true,
         onFinish: () => {
             isRefreshing.value = false;
-            location.reload();
+            votes.value = props.votes_default
         },
     });
 }
@@ -232,8 +232,7 @@ const bangers_count = computed(() => {
     return Object.keys(votes.value).filter(t_id => votes.value[t_id].length >= vote_max).length
 })
 
-var vote_max = 0;
-onBeforeMount(() => {
+const vote_max = computed(() => {
     // Count the number of unique users present here
     let ids = []
     for (const track of props.submissions) {
@@ -241,7 +240,7 @@ onBeforeMount(() => {
     }
     // the most votes a track can have is one less than the number of people voting
     // (can't vote for yourself)
-    vote_max = ids.length - 1;
+    return ids.length - 1;
 })
 </script>
 

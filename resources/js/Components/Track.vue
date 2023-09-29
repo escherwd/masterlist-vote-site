@@ -40,9 +40,10 @@
             </a>
             <div class="h-5 w-24 shrink-0 bg-zinc-800 relative p-2">
                 <div class="relative w-full h-full bg-zinc-700 overflow-hidden">
-                    <div class="left-px border-r-2 border-zinc-500 h-full absolute z-10" :style="{ width: `${(vote_threshold/vote_max)*100}%` }"></div>
+                    <div class="left-px border-r-2 border-white/50 h-full absolute z-0" :style="{ width: `${(vote_threshold/vote_max)*100}%` }"></div>
                     <div :class="{
-                        'bg-green-600': vote_count >= vote_threshold,
+                        'bg-primary': vote_count == vote_max,
+                        'bg-green-600': vote_count >= vote_threshold && vote_count < vote_max,
                         'bg-white': vote_count < vote_threshold
                     }" class="absolute h-full transition-all" :style="{ width: `${(vote_count/vote_max)*100}%` }">
                     </div>

@@ -18,21 +18,26 @@
             </div>
             <div class="px-4 py-3 flex justify-between">
                 <button @click="emit('close')" class="button">Cancel</button>
-                <button :disabled="!consent" class="button bg-primary text-black/90 disabled:bg-primary/50">Finish Episode</button>
+                <button :disabled="!consent" @click="finishEpisode" class="button bg-primary text-black/90 disabled:bg-primary/50">Finish Episode</button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps({
+    episode: Object,
     counts: Array // [masterlist, bangers, total]
 })
 const emit = defineEmits(['close'])
 
 const consent = ref(false);
 
+function finishEpisode() {
+    useForm({}).post(`/api/episode/${props.episode.id}/finish`)
+}
 
 </script>
