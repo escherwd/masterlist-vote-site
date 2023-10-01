@@ -73,7 +73,7 @@ class FinishEpisode extends Command
 
         // Remove tracks from submissions list
         if (count($ids_all) > 0) {
-            //$this->removeFromPlaylist($user->spotify_token, $season->playlist_submissions, $ids_all);
+            $this->removeFromPlaylist($user->spotify_token, $season->playlist_submissions, $ids_all);
         }
 
         $new_season = null;
