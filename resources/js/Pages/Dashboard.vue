@@ -4,8 +4,8 @@
 
     <AuthenticatedLayout>
 
-        <FinishEpisodeModal v-if="showFinishEpisodeModal" :episode="props.episode" 
-            :counts="[accepted_songs_count, bangers_count, submissions.length]" @close="showFinishEpisodeModal = false" />
+        <FinishEpisodeModal v-if="showFinishEpisodeModal" :episode="props.episode"
+            :counts="[accepted_songs_count, bangers_count, submissions.length]" @close="showFinishEpisodeModal = false" :finish_season="isFinishingSeason" />
 
         <div class="flex flex-col md:flex-row items-start gap-x-4 w-full relative gap-y-12">
             <div class="flex-1 min-w-0 max-w-full w-full">
@@ -17,7 +17,9 @@
                 <div v-if="submissions.length == 0" class="text-center py-8 text-white/40 uppercase text-sm tracking-wider">
                     <FaceFrownIcon :class="{ 'animate-pulse': isRefreshing }" class="h-6 w-6 mx-auto" />
                     <span class="block mt-2">No submissions yet.</span>
-                    <button @click="refreshTracks" class="block mt-2 uppercase text-xs tracking-wide font-medium hover:text-white mx-auto">Refresh Tracks</button>
+                    <button @click="refreshTracks"
+                        class="block mt-2 uppercase text-xs tracking-wide font-medium hover:text-white mx-auto">Refresh
+                        Tracks</button>
                 </div>
             </div>
             <div class="flex-grow-0 min-w-0 flex-shrink-0 w-full md:w-64 ">
@@ -36,7 +38,14 @@
                     </div>
                     <div class="bg-zinc-800 py-4 px-4 col-span-2">
                         <div class="card-label">THEME</div>
-                        <div class="leading-snug text-white/60">{{ episode.theme }}</div>
+                        <textarea class="leading-snug text-white/60 w-full bg-transparent resize-none p-0 border-0 m-0 focus:outline-primary focus:ring-0" v-model="editEpisode.theme"
+                            placeholder="No Theme Yet." name="episode_theme" rows="2" @keydown.enter.native.prevent="themeSubmit">
+
+                        </textarea>
+                        <div class="text-xs text-white/30 italic">
+                            <span v-if="themeNeedsSave" class="animate-pulse">hit enter to save</span>
+                            <span v-else>click to edit</span>
+                        </div>
                     </div>
                 </div>
 
@@ -69,6 +78,9 @@
                                     {{ track.votes }} VOTES
                                 </div>
                             </div>
+                            <div v-if="leaderboard.length == 0" class="text-white/30 italic">
+                                No Votes Yet
+                            </div>
                         </div>
                     </div>
                     <div class="bg-zinc-800 py-3 px-4 col-span-2">
@@ -87,6 +99,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="leaderboard.length == 0" class="text-white/30 italic">
+                            No Votes Yet
+                        </div>
                     </div>
                 </div>
 
@@ -99,13 +114,13 @@
                         <span>Refresh Tracks</span>
                     </button>
 
-                    <button @click="showFinishEpisodeModal = true"
+                    <button @click="isFinishingSeason = false;showFinishEpisodeModal = true"
                         class="col-span-2 button w-full bg-green-600 hover:bg-green-600/80">
                         <CheckIcon />
                         <span>Finish Episode</span>
                     </button>
 
-                    <div class="col-span-2 p-2 text-center text-sm text-white/60">
+                    <div @click="isFinishingSeason = true;showFinishEpisodeModal = true" class="col-span-2 p-2 text-center text-sm text-white/60">
                         <button class="hover:underline">
                             Finish Season
                         </button>
@@ -130,6 +145,7 @@ import { computed, ref } from 'vue';
 import { ArrowPathIcon, CheckIcon } from "@heroicons/vue/20/solid"
 import { FaceFrownIcon } from '@heroicons/vue/24/solid'
 import FinishEpisodeModal from "@/Components/FinishEpisodeModal.vue";
+import { watch } from 'vue';
 
 const user = usePage().props.auth.user;
 
@@ -147,6 +163,27 @@ const votes = ref(props.votes_default);
 
 const isRefreshing = ref(false);
 const showFinishEpisodeModal = ref(false);
+const isFinishingSeason = ref(false);
+
+// Votes need to be synced back and forth
+watch(() => props.votes_default, (new_votes) => {
+    votes.value = new_votes;
+});
+
+const editEpisode = useForm({
+    theme: props.episode.theme
+});
+
+const themeNeedsSave = computed(() => props.episode.theme != editEpisode.theme);
+
+function themeSubmit() {
+    editEpisode.post(`/api/episode/${props.episode.id}/update`, {
+        preserveScroll: true,
+        onFinish: () => {
+            document.activeElement.blur()
+        },
+    });
+}
 
 // Log a vote (or unvote) for a track_id
 function vote(track_id, is_vote) {
@@ -180,7 +217,6 @@ function refreshTracks() {
         preserveScroll: true,
         onFinish: () => {
             isRefreshing.value = false;
-            votes.value = props.votes_default
         },
     });
 }

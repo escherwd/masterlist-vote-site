@@ -14,7 +14,7 @@ class SpotifyLoginController extends Controller {
     // Send user to the Spotify login page
     public function redirect(Request $request) {
 
-        return Socialite::driver('spotify')->redirect();
+        return Socialite::driver('spotify')->scopes(['playlist-read-private','playlist-read-collaborative','playlist-modify-private','playlist-modify-public'])->redirect();
     }
 
     // Handle authentication callback

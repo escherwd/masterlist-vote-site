@@ -17,8 +17,12 @@
                 </div>
             </div>
             <div class="px-4 py-3 flex justify-between">
-                <button @click="emit('close')" class="button">Cancel</button>
-                <button :disabled="!consent" @click="finishEpisode" class="button bg-primary text-black/90 disabled:bg-primary/50">Finish Episode</button>
+                <button @click="emit('close')" class="button hover:bg-zinc-800">Cancel</button>
+                <button :disabled="!consent" @click="finishEpisode" class="button bg-green-600 text-white/90 hover:bg-green-600/80 disabled:text-white/30 disabled:bg-green-600/50">
+                    <ArrowPathIcon v-if="loading" class="animate-spin" />
+                    <CheckIcon v-else />
+                    Finish {{ props.finish_season ? "Season" : "Episode" }}
+                </button>
             </div>
         </div>
     </div>
@@ -27,17 +31,30 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { ArrowPathIcon, CheckIcon } from '@heroicons/vue/20/solid'
 
 const props = defineProps({
     episode: Object,
+    finish_season: Boolean,
     counts: Array // [masterlist, bangers, total]
 })
 const emit = defineEmits(['close'])
 
 const consent = ref(false);
+const loading = ref(false);
 
 function finishEpisode() {
-    useForm({}).post(`/api/episode/${props.episode.id}/finish`)
+    loading.value = true;
+    useForm({
+        finish_season: props.finish_season
+    }).post(`/api/episode/${props.episode.id}/finish`, {
+        onFinish: () => {
+            loading.value = false;
+        },
+        onSuccess: () => {
+            emit('close');
+        }
+    })
 }
 
 </script>
