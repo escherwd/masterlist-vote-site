@@ -238,7 +238,7 @@ const leaderboard = computed(() => {
     let top = Object.keys(votes.value)
         .filter((k) => votes.value[k].length != 0) // remove songs with no votes
         .sort((a, b) => votes.value[b].length - votes.value[a].length)
-        .splice(0, 10) // just take the top 10
+        .splice(0, 8) // just take the top 8
         .map((k) => {
             var t = props.submissions.filter(t => t.id == k)[0]
             if (!t) return null;
