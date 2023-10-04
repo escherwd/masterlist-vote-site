@@ -11,7 +11,7 @@
             <div class="flex-1 pl-1 min-w-0">
                 <div class="font-medium ellipsis">{{ track.title }}</div>
                 <div class="ellipsis text-sm text-white/60">{{ track.artist }}</div>
-                
+
             </div>
             <button disabled v-if="disable_vote" class="vote-disabled button w-24">
                 <span>VOTE</span>
@@ -35,25 +35,33 @@
                     {{ user?.name ?? track.added_by }}
                 </div>
             </div>
-            <a href="#" class="text-xs uppercase tracking-wider whitespace-nowrap flex items-center hover:underline">{{ vote_count }} votes
-                <!-- <ChevronRightIcon class="h-4 w-4" /> -->
-            </a>
-            <div class="h-5 w-24 shrink-0 bg-zinc-800 relative p-2">
-                <div class="relative w-full h-full bg-zinc-700 overflow-hidden">
-                    <div class="left-px border-r-2 border-white/50 h-full absolute z-0" :style="{ width: `${(vote_threshold/vote_max)*100}%` }"></div>
-                    <div :class="{
-                        'bg-primary': vote_count == vote_max,
-                        'bg-green-600': vote_count >= vote_threshold && vote_count < vote_max,
-                        'bg-white': vote_count < vote_threshold
-                    }" class="absolute h-full transition-all" :style="{ width: `${(vote_count/vote_max)*100}%` }">
+            <div>
+                <div class="w-5 h-5 rounded-full overflow-hidden inline-block border-2 border-zinc-900 -ml-2" v-for="voter in voters">
+                    <img v-if="voter.spotify_avatar" :src="voter.spotify_avatar" alt="">
+                    <div v-else class="h-full w-full bg-zinc-700 text-white/60 overflow-hidden flex items-center justify-center uppercase text-xs font-mono leading-none font-bold">
+                        {{ voter.name.substring(0,1) }}
                     </div>
                 </div>
-                
             </div>
-            
-        </div>
-        <div v-if="voters.length > 0" class="text-white/60 text-xs uppercase tracking-wide flex mt-2 justify-end">
-            <span class="voter" v-for="voter in voters">{{ voter.name }}<span class="voter-comma">,&nbsp;</span></span>
+            <div class="h-5 w-24 shrink-0 bg-zinc-800 relative flex items-center gap-x-2">
+                <div class="flex-grow-0 text-xs h-full font-mono leading-none border-r border-zinc-600 px-2 flex items-center font-bold">
+                    {{ vote_count }}
+                </div>
+                <div class="py-2 flex-1 pr-2">
+                    <div class="relative w-full h-1 bg-zinc-700 overflow-hidden">
+                        <div class="left-px border-r-2 border-white/30 h-full absolute z-0"
+                            :style="{ width: `${(vote_threshold / vote_max) * 100}%` }"></div>
+                        <div :class="{
+                            'bg-primary': vote_count == vote_max,
+                            'bg-green-600': vote_count >= vote_threshold && vote_count < vote_max,
+                            'bg-white': vote_count < vote_threshold
+                        }" class="absolute h-full transition-all" :style="{ width: `${(vote_count / vote_max) * 100}%` }">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </template>
@@ -77,7 +85,6 @@ const emit = defineEmits(['vote'])
 </script>
 
 <style scoped lang="scss">
-
 .vote {
     @apply hover:text-white text-white/50 bg-zinc-800;
 }
@@ -105,8 +112,7 @@ const emit = defineEmits(['vote'])
     }
 }
 
-.voter:last-child > .voter-comma {
+.voter:last-child>.voter-comma {
     display: none;
 }
-
 </style>
