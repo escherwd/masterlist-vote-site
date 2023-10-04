@@ -36,7 +36,7 @@
                 </div>
             </div>
             <a href="#" class="text-xs uppercase tracking-wider whitespace-nowrap flex items-center hover:underline">{{ vote_count }} votes
-                <ChevronRightIcon class="h-4 w-4" />
+                <!-- <ChevronRightIcon class="h-4 w-4" /> -->
             </a>
             <div class="h-5 w-24 shrink-0 bg-zinc-800 relative p-2">
                 <div class="relative w-full h-full bg-zinc-700 overflow-hidden">
@@ -52,6 +52,9 @@
             </div>
             
         </div>
+        <div v-if="voters.length > 0" class="text-white/60 text-xs uppercase tracking-wide flex mt-2 justify-end">
+            <span class="voter" v-for="voter in voters">{{ voter.name }}<span class="voter-comma">,&nbsp;</span></span>
+        </div>
     </div>
 </template>
 
@@ -66,6 +69,7 @@ const props = defineProps({
     vote_threshold: Number,
     vote_max: Number,
     user: Object,
+    voters: Array,
 })
 
 const emit = defineEmits(['vote'])
@@ -100,4 +104,9 @@ const emit = defineEmits(['vote'])
         transform: scale(1);
     }
 }
+
+.voter:last-child > .voter-comma {
+    display: none;
+}
+
 </style>

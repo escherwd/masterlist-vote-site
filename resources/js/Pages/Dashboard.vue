@@ -5,14 +5,16 @@
     <AuthenticatedLayout>
 
         <FinishEpisodeModal v-if="showFinishEpisodeModal" :episode="props.episode"
-            :counts="[accepted_songs_count, bangers_count, submissions.length]" @close="showFinishEpisodeModal = false" :finish_season="isFinishingSeason" />
+            :counts="[accepted_songs_count, bangers_count, submissions.length]" @close="showFinishEpisodeModal = false"
+            :finish_season="isFinishingSeason" />
 
         <div class="flex flex-col md:flex-row items-start gap-x-4 w-full relative gap-y-12">
             <div class="flex-1 min-w-0 max-w-full w-full">
                 <template v-for="track in submissions">
                     <Track :track="track" :vote_count="votes[track.id]?.length ?? 0" :vote_max="vote_max"
                         :vote_threshold="episode.vote_min" :disable_vote="track.added_by == user.spotify_id"
-                        :voted="(votes[track.id] ?? []).includes(user.id)" :user="user_for(track.added_by)" @vote="vote" />
+                        :voted="(votes[track.id] ?? []).includes(user.id)" :user="user_for_spotify(track.added_by)"
+                        :voters="votes[track.id].map(v => user_for_id(v))" @vote="vote" />
                 </template>
                 <div v-if="submissions.length == 0" class="text-center py-8 text-white/40 uppercase text-sm tracking-wider">
                     <FaceFrownIcon :class="{ 'animate-pulse': isRefreshing }" class="h-6 w-6 mx-auto" />
@@ -38,8 +40,10 @@
                     </div>
                     <div class="bg-zinc-800 py-4 px-4 col-span-2">
                         <div class="card-label">THEME</div>
-                        <textarea class="leading-snug text-white/60 w-full bg-transparent resize-none p-0 border-0 m-0 focus:outline-primary focus:ring-0" v-model="editEpisode.theme"
-                            placeholder="No Theme Yet." name="episode_theme" rows="2" @keydown.enter.native.prevent="themeSubmit">
+                        <textarea
+                            class="leading-snug text-white/60 w-full bg-transparent resize-none p-0 border-0 m-0 focus:outline-primary focus:ring-0"
+                            v-model="editEpisode.theme" placeholder="No Theme Yet." name="episode_theme" rows="2"
+                            @keydown.enter.native.prevent="themeSubmit">
 
                         </textarea>
                         <div class="text-xs text-white/30 italic">
@@ -114,13 +118,14 @@
                         <span>Refresh Tracks</span>
                     </button>
 
-                    <button @click="isFinishingSeason = false;showFinishEpisodeModal = true"
+                    <button @click="isFinishingSeason = false; showFinishEpisodeModal = true"
                         class="col-span-2 button w-full bg-green-600 hover:bg-green-600/80">
                         <CheckIcon />
                         <span>Finish Episode</span>
                     </button>
 
-                    <div @click="isFinishingSeason = true;showFinishEpisodeModal = true" class="col-span-2 p-2 text-center text-sm text-white/60">
+                    <div @click="isFinishingSeason = true; showFinishEpisodeModal = true"
+                        class="col-span-2 p-2 text-center text-sm text-white/60">
                         <button class="hover:underline">
                             Finish Season
                         </button>
@@ -203,8 +208,15 @@ function vote(track_id, is_vote) {
     }).post('/api/vote', { preserveScroll: true });
 }
 
+function user_for_id(id) {
+    for (const u of props.group_users) {
+        if (u.id == id) return u
+    }
+    return null;
+}
+
 // Grab a user object based on a spotify_id
-function user_for(spotify_id) {
+function user_for_spotify(spotify_id) {
     for (const u of props.group_users) {
         if (u.spotify_id == spotify_id) return u
     }
