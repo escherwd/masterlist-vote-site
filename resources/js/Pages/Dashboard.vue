@@ -238,7 +238,7 @@ const leaderboard = computed(() => {
     let top = Object.keys(votes.value)
         .filter((k) => votes.value[k].length != 0) // remove songs with no votes
         .sort((a, b) => votes.value[b].length - votes.value[a].length)
-        .splice(0, 5) // just take the top 5
+        .splice(0, 10) // just take the top 10
         .map((k) => {
             var t = props.submissions.filter(t => t.id == k)[0]
             if (!t) return null;
@@ -264,7 +264,7 @@ const user_leaderboard = computed(() => {
     // Attach to actual user objects
     return Object.keys(vote_counts)
         .sort((a, b) => vote_counts[b] - vote_counts[a])
-        .splice(0, 3).map(user_id => {
+        .splice(0, 5).map(user_id => {
             let voter = props.group_users.filter(u => u.id == user_id)[0]
             voter.votes = vote_counts[user_id];
             return voter;
