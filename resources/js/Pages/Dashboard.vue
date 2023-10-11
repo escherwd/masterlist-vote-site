@@ -277,7 +277,7 @@ const accepted_songs_count = computed(() => {
 
 const bangers_count = computed(() => {
     if (vote_max == 0) return 0;
-    return Object.keys(votes.value).filter(t_id => votes.value[t_id].length >= vote_max).length
+    return Object.keys(votes.value).filter(t_id => votes.value[t_id].length >= vote_max.value).length
 })
 
 const vote_max = computed(() => {
