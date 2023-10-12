@@ -62,17 +62,17 @@ class FinishEpisode extends Command
         }
 
         // Add songs to master list
-        if (count($ids_masterlist) > 0) {
+        if (count($ids_masterlist) > 0 && env("SPOTIFY_DO_MAKE_CHANGES", false)) {
             $this->addToPlaylist($user->spotify_token, $season->playlist_masterlist, $ids_masterlist);
         }
 
         // Add songs to certified bangers
-        if (count($ids_banger) > 0) {
+        if (count($ids_banger) > 0 && env("SPOTIFY_DO_MAKE_CHANGES", false)) {
             $this->addToPlaylist($user->spotify_token, $season->playlist_bangers, $ids_banger);
         }
 
         // Remove tracks from submissions list
-        if (count($ids_all) > 0) {
+        if (count($ids_all) > 0 && env("SPOTIFY_DO_MAKE_CHANGES", false)) {
             $this->removeFromPlaylist($user->spotify_token, $season->playlist_submissions, $ids_all);
         }
 

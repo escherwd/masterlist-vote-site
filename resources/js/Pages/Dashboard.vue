@@ -224,6 +224,8 @@ function user_for_spotify(spotify_id) {
 }
 
 function refreshTracks() {
+    // DISABLE REFRESHING TRACKS FOR NOW
+    return;
     isRefreshing.value = true;
     useForm({}).post(`/api/episode/${props.episode.id}/refresh`, {
         preserveScroll: true,

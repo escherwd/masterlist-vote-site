@@ -17,11 +17,11 @@
                 <span>VOTE</span>
                 <NoSymbolIcon />
             </button>
-            <button v-else-if="voted" @click="$emit('vote', track.id, false)" class="voted button w-24">
+            <button v-else-if="voted" @click="$emit('vote', track.id, false)" class="selected button w-24">
                 <span>VOTED</span>
                 <CheckIcon />
             </button>
-            <button v-else @click="$emit('vote', track.id, true)" class="vote button w-24">
+            <button v-else @click="$emit('vote', track.id, true)" class="unselected button w-24">
                 <span>VOTE</span>
                 <PlusIcon />
             </button>
@@ -85,12 +85,8 @@ const emit = defineEmits(['vote'])
 </script>
 
 <style scoped lang="scss">
-.vote {
-    @apply hover:text-white text-white/50 bg-zinc-800;
-}
 
-.voted {
-    @apply text-black/90 bg-primary hover:bg-primary/80;
+.selected {
     animation: vote_animation 120ms ease 0s 1;
 }
 

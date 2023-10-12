@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\SpotifyLoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StatsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -32,12 +34,8 @@ Route::middleware('auth')->group(function () {
     # Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     # Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/dashboard', [DashboardController::class, 'view'])->name('dashboard');
-    Route::get('/history', function () {
-        return "hi";
-    })->name('history');
-    Route::get('/stats', function () {
-        return "hi";
-    })->name('stats');
+    Route::get('/history', [HistoryController::class, "view"])->name('history');
+    Route::get('/stats', [StatsController::class, "view"])->name('stats');
 });
 
 
