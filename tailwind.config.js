@@ -15,7 +15,8 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Inter', ...defaultTheme.fontFamily.sans],
-                mono: ['Roboto Mono', ...defaultTheme.fontFamily.mono]
+                mono: ['Roboto Mono', ...defaultTheme.fontFamily.mono],
+                condensed: ['Sofia Sans Extra Condensed', ...defaultTheme.fontFamily.mono]
             },
             colors: {
                 primary: colors.yellow[400]

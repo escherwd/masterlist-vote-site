@@ -15,7 +15,7 @@ import { Link } from '@inertiajs/vue3';
                     <span class="text-white/90">👉&nbsp;&nbsp;VOTE</span>.ESCHER.WTF
                 </div>
                 <div class="h-px flex-grow border-b border-dashed border-zinc-600"></div>
-                <Link class=" text-primary hover:underline" method="post" :href="route('logout')">
+                <Link as="button" class=" text-primary hover:underline" method="post" :href="route('logout')">
                 LOG OUT
                 </Link>
             </div>
