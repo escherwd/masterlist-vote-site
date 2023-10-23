@@ -63,6 +63,8 @@ class RefreshSubmissions extends Command
                 "episode_id" => Episode::where('season_id', $season->id)->max('id'),
                 "track_id" => $item["track"]["id"],
             ], [
+                "season_id" => $season->id,
+                "group_id" => $season->group_id,
                 "title" => $item["track"]["name"],
                 "artist" => implode(", ",array_map(fn ($artist) => $artist["name"], $item["track"]["artists"])),
                 "album" => $item["track"]["album"]["name"],

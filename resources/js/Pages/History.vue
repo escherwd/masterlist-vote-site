@@ -4,22 +4,24 @@
     <AuthenticatedLayout>
 
         <!-- season picker -->
-        <div class="flex gap-3 my-2">
-            <Link href="/history" class="button" :class="!props.season_id ? 'selected' : 'unselected'">All</Link>
-            <Link :href="`/history/${season.id}`" v-for="season of seasons" :key="season.id" class="button unselected"
-                :class="props.season_id == season.id ? 'selected' : 'unselected'">Season {{ season.number }}</Link>
-        </div>
+        <SeasonPicker :seasons="seasons" :season_id="season_id" slug="history" />
 
         <!-- episodes -->
         <div class="mt-6">
             <div v-for="episode of episodes">
-                <div class="bg-zinc-800 text-white/80 py-4 px-4 flex items-center gap-4 mt-4">
-                    <div class="font-condensed text-4xl font-normal text-white/60">
+                <div class="bg-zinc-800 text-white/80 py-4 px-4 flex items-center gap-2 mt-4">
+                    <div class="font-condensed text-4xl font-normal text-white/60 pr-2">
                         S{{ episode.season.number.toString().padStart(2,'0') }}:<span class="text-white">E{{ episode.number.toString().padStart(2,'0') }}</span>
                     </div>
-                    <div>
+                    <div class="flex-1">
                         <div class="text-xs text-white/60">Season {{ episode.season.number }}</div>
                         <h3 class="text-sm">Episode {{ episode.number }}</h3>
+                    </div>
+                    <div>
+                        <CalendarIcon class="w-4 h-4" />
+                    </div>
+                    <div>
+                        {{ DateTime.fromISO(episode.created_at).toFormat("LLL dd, yyyy") }}
                     </div>
                 </div>
                 <div v-if="episode.theme" class="px-4 pb-3 bg-zinc-800">
@@ -45,6 +47,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import Track from '@/Components/Track.vue';
+import { DateTime } from 'luxon'
+import { CalendarIcon, ClockIcon } from '@heroicons/vue/20/solid';
+import SeasonPicker from '../Components/SeasonPicker.vue'
 
 const user = usePage().props.auth.user;
 

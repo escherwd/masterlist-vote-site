@@ -5,8 +5,10 @@
                 <img :src="track.album_cover" class=" w-full h-full object-contain" alt="album cover">
                 <div v-if="vote_count >= vote_threshold"
                     class="w-5 h-5 rounded-full overflow-hidden bg-zinc-800 absolute -top-2 -right-2 outline outline-2 outline-zinc-800 flex items-center justify-center">
-                    <StarIcon v-if="vote_count == vote_max" class="h-4 w-4 text-primary" />
-                    <CheckCircleIcon v-else class="h-5 w-5 text-emerald-500" />
+                    <div class="w-4 h-4 rounded-full flex items-center justify-center text-zinc-800/80" :class="vote_count == vote_max ? `bg-primary` : `bg-green-600`">
+                        <StarIcon v-if="vote_count == vote_max" class="w-3 h-3" />
+                        <CheckIcon v-else class="w-3 h-3" />
+                    </div>
                 </div>
             </div>
             <div class="flex-1 pl-1 min-w-0">
@@ -14,7 +16,7 @@
                 <div class="ellipsis text-sm text-white/60">{{ track.artist }}</div>
             </div>
             <div v-if="props.historical">
-                <div class="w-12 h-12 rounded-full overflow-hidden inline-block border-4 border-zinc-800 -ml-4"
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden inline-block border-4 border-zinc-800 -ml-4"
                     v-for="voter in voters">
                     <img v-if="voter.spotify_avatar" :src="voter.spotify_avatar" alt="">
                     <div v-else
@@ -71,7 +73,7 @@
                             :style="{ width: `${(vote_threshold / vote_max) * 100}%` }"></div>
                         <div :class="{
                             'bg-primary': vote_count == vote_max,
-                            'bg-emerald-500': vote_count >= vote_threshold && vote_count < vote_max,
+                            'bg-green-600': vote_count >= vote_threshold && vote_count < vote_max,
                             'bg-zinc-300': vote_count < vote_threshold
                         }" class="absolute h-full transition-all"
                             :style="{ width: `${(vote_count / vote_max) * 100}%` }">

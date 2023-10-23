@@ -36,6 +36,8 @@ class User extends Authenticatable
     protected $hidden = [
         'spotify_token',
         'spotify_refresh_token',
+        'remember_token',
+        'spotify_token_expire',
     ];
 
     /**
