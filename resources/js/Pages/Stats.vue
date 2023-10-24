@@ -162,6 +162,7 @@
         text-overflow: clip;
         position: absolute;
         float: left;
+        padding: 0;
     }
 }
 </style>
