@@ -36,7 +36,7 @@
                                 <span>Avg. Votes Per Track</span>
                             </td>
                             <td>
-                                <span>{{ (votesTotal/props.tracks.length).toFixed(1) }}</span>
+                                <span>{{ (votesTotal / props.tracks.length).toFixed(1) }}</span>
                             </td>
                         </tr>
                     </tbody>
@@ -72,7 +72,7 @@
                                 <span>
                                     {{ masterListTotal }}
                                     <span class="text-sm text-white/50">
-                                        ({{ ((masterListTotal / props.tracks.length)*100).toFixed(0) }}%)
+                                        ({{ ((masterListTotal / props.tracks.length) * 100).toFixed(0) }}%)
                                     </span>
                                 </span>
                             </td>
@@ -85,7 +85,7 @@
                                 <span>
                                     {{ bangersTotal }}
                                     <span class="text-sm text-white/50">
-                                        ({{ ((bangersTotal / props.tracks.length)*100).toFixed(0) }}%)
+                                        ({{ ((bangersTotal / props.tracks.length) * 100).toFixed(0) }}%)
                                     </span>
                                 </span>
                             </td>
@@ -108,6 +108,13 @@
             <div class="tile">
                 <h2>Share of Certified Bangers</h2>
                 <Doughnut :options="donutOptions" :data="pieFor(bangersForUsers, '# of songs')" />
+            </div>
+            <div class="pb-4 pt-36 sm:col-span-2">
+                <h1 class="text-5xl">Trends</h1>
+            </div>
+            <div class="sm:col-span-2 tile">
+                <h2>Submissions by Decade</h2>
+                <Bubble :options="decadeTrendOptions" :data="barFor(collect(fixedDecades), '# of songs')" />
             </div>
         </div>
 
@@ -172,14 +179,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import SeasonPicker from '@/Components/SeasonPicker.vue';
 import EpisodePicker from '@/Components/EpisodePicker.vue';
-import { Bar, Doughnut } from 'vue-chartjs';
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, defaults, ArcElement } from 'chart.js'
+import { Bar, Doughnut, Bubble } from 'vue-chartjs';
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, defaults, ArcElement, PointElement } from 'chart.js'
 import _ from 'lodash'
 import { collect } from 'collect.js'
 
 import colors from 'tailwindcss/colors'
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement)
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement, PointElement)
 defaults.color = colors.neutral[400]
 defaults.backgroundColor = colors.yellow[400]
 defaults.responsive = true
@@ -213,6 +220,7 @@ let votesForUsers = collect(props.group_users).mapWithKeys(u => [u.name, 0])
 let castsForUsers = collect(props.group_users).mapWithKeys(u => [u.name, 0])
 let listForUsers = collect(props.group_users).mapWithKeys(u => [u.name, 0])
 let bangersForUsers = collect(props.group_users).mapWithKeys(u => [u.name, 0])
+let decadesForUsers = collect(props.group_users).mapWithKeys(u => [u.name, {}])
 
 let votesTotal = 0;
 let masterListTotal = 0;
@@ -233,15 +241,43 @@ for (const track of props.tracks) {
         bangersTotal += 1
         bangersForUsers.items[nameFromId[track.added_by]] += 1
     }
+    // add decade
+    var item = decadesForUsers.items[nameFromId[track.added_by]]
+    const decade = track.year - (track.year % 5)
+    if (item[decade] == null) {
+        item[decade] = 1
+    } else {
+        item[decade] += 1
+    }
 }
 
-console.log(listForUsers)
+
+console.log(decadesForUsers.items)
+
 
 // Change into [{x: name, y: votes}, ...] format
 votesForUsers = votesForUsers.map((v, i) => ({ x: i, y: v, backgroundColor: colorFromName[i] })).values().sortByDesc('y')
 castsForUsers = castsForUsers.map((v, i) => ({ x: i, y: v, backgroundColor: colorFromName[i] })).values().sortByDesc('y')
 listForUsers = listForUsers.map((v, i) => ({ x: i, y: v, backgroundColor: colorFromName[i] })).values().sortByDesc('y')
 bangersForUsers = bangersForUsers.map((v, i) => ({ x: i, y: v, backgroundColor: colorFromName[i] })).values().sortByDesc('y')
+// decadesForUsers = decadesForUsers.map((v, i) => ({ x: i, y: v, backgroundColor: colorFromName[i] })).values().sortByDesc('y')
+
+var fixedDecades = []
+var uCount = 0
+for (const u in decadesForUsers.items) {
+    for (const decade in decadesForUsers.items[u]) {
+        fixedDecades.push({
+            x: uCount,
+            y: decade, 
+            r: decadesForUsers.items[u][decade] * 3,
+            name: u,
+            backgroundColor: colorFromName[u]
+        })
+    }
+    uCount++
+}
+
+console.log(fixedDecades)
 
 function barFor(items, label) {
     return {
@@ -269,6 +305,25 @@ function pieFor(items, label) {
     }
 }
 
+const decadeTrendOptions = {
+  scales: {
+    x: {
+      ticks: {
+        callback: function(value, index, ticks) {
+          return props.group_users[index].name
+        }
+      }
+    },
+    y: {
+      ticks: {
+        callback: function(value, index, ticks) {
+          return value
+        },
+        padding: 16,
+      },
+    }
+  }
+}
 
 
 
