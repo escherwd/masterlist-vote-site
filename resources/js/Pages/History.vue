@@ -62,6 +62,10 @@ const props = defineProps({
 })
 
 function vote_max_for(episode) {
+
+    // lets just use group size for now
+    return props.group_users.length - 1;
+
     // Count the number of unique users present here
     let ids = []
     for (const track of episode.submissions) {
