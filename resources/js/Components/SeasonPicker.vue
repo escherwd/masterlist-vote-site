@@ -1,5 +1,5 @@
 <template>
-	<div class="flex gap-3 my-2">
+	<div class="flex gap-3 my-2 overflow-scroll">
 	            <Link :href="`/${slug}`" class="button" :class="!props.season_id ? 'selected' : 'unselected'">All</Link>
 	            <Link :href="`/${slug}/${season.id}`" v-for="season of seasons" :key="season.id" class="button unselected"
 	                :class="props.season_id == season.id ? 'selected' : 'unselected'">Season {{ season.number }}</Link>

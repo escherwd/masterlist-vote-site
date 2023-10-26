@@ -24,9 +24,9 @@ class DashboardController extends Controller
         /** @var User[] */
         $group_users = $group->users()->get();
         /** @var Season */
-        $season = $group->seasons()->orderBy('id','desc')->first();
+        $season = $group->seasons()->orderBy('number','desc')->first();
         /** @var Episode */
-        $episode = $season->episodes()->orderBy('id','desc')->first();
+        $episode = $season->episodes()->orderBy('number','desc')->first();
         /** @var Submission[] */
         $submissions = $episode->submissions()->orderBy('order', 'asc')->get();
 

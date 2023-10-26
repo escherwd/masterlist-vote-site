@@ -18,15 +18,17 @@ class HistoryController extends Controller
 
         $group = $user->groups()->first();
         $group_users = $group->users;
-        $seasons = $group->seasons;
+        $seasons = $group->seasons()->orderBy('number','asc')->get();
         $episodes = [];
 
         if ($season_id) {
             $season = Season::findOrFail($season_id);
-            $episodes = $season->episodes()->with(['submissions.votes','season'])->get();
+            $episodes = $season->episodes()->orderBy('number','asc')->with(['submissions.votes','season'])->get();
         } else {
-            $episodes = Episode::whereIn("season_id",$seasons->pluck('id'))->with(['submissions.votes','season'])->get();
+            $episodes = Episode::whereIn("season_id",$seasons->pluck('id'))->orderBy('number','desc')->with(['submissions.votes','season'])->get()->toArray();
             // dd(array_map(function ($s) { return $s->id; }, $seasons));
+            usort($episodes, function ($a, $b) { return $a["number"] - $b["number"]; });
+            usort($episodes, function ($a, $b) { return $a["season"]["number"] - $b["season"]["number"]; });
         }
 
         return Inertia::render('History', [
