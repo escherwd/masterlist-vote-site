@@ -109,12 +109,78 @@
                 <h2>Share of Certified Bangers</h2>
                 <Doughnut :options="donutOptions" :data="pieFor(bangersForUsers, '# of songs')" />
             </div>
-            <div class="pb-4 pt-36 sm:col-span-2">
+            <div class="pb-4 pt-36">
                 <h1 class="text-5xl">Trends</h1>
+            </div>
+            <div class="pb-4">
+                <table class="w-full datatable">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span>Most Popular Year</span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ most_popular_year }}
+                                    <span class="text-sm text-white/50">
+                                        ({{ ((most_popular_year_percent) * 100).toFixed(0) }}%)
+                                    </span>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="sm:col-span-2 tile">
                 <h2>Submissions by Decade</h2>
-                <Bubble :options="decadeTrendOptions" :data="barFor(collect(fixedDecades), '# of songs')" />
+
+                <div class="relative">
+                    <div class="absolute inset-0 flex justify-evenly">
+                        <div v-for="(tmpl_decade) in decades"
+                            class="flex-1 border-r border-dashed border-zinc-700 last:border-none">
+                        </div>
+                    </div>
+                    <div class="my-6 flex justify-evenly">
+                        <div v-for="(tmpl_decade) in decades" class="flex-1 text-center text-xs text-white/60">
+                            <span class="hidden sm:inline">{{ tmpl_decade }}s</span>
+                            <span class="inline sm:hidden">'{{ (tmpl_decade % 100).toString().padStart(2, '0') }}s</span>
+                        </div>
+                    </div>
+                    <div v-for="(user_decades, user_name) in decadesForUsers.items" class="mb-5 z-10 relative">
+                        <div class="flex w-full justify-evenly">
+                            <div v-for="(tmpl_decade) in decades"
+                                class="flex-1 flex justify-evenly border-b border-zinc-700">
+                                <div v-if="user_decades[tmpl_decade]" v-for="tmpl_period in periods"
+                                    class="flex-1 h-12 relative">
+                                    <div v-if="user_decades[tmpl_decade][tmpl_period]"
+                                        class="absolute bottom-0 left-0 right-0 bg-white hover:border border-white"
+                                        @mouseenter="setYearToolTip(user_name, tmpl_decade, tmpl_period, user_decades[tmpl_decade][tmpl_period] ?? 0)"
+                                        @mouseleave="setYearToolTip(null)"
+                                        :style="{ height: `${100 * ((user_decades[tmpl_decade][tmpl_period] ?? 0) / period_max_z)}%`, background: colorFromName[user_name] }">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="year_tooltip_user == user_name"
+                            class="w-full mt-2 absolute text-xs uppercase tracking-wide text-white/60 text-center">
+                            {{ year_tooltip_message }}
+                        </div>
+                        <div class="flex w-full justify-evenly mt-2 h-3">
+                            <div v-for="(tmpl_decade) in decades"
+                                class="flex-1 text-center font-mono text-xs text-white/60">
+                                <span v-if="user_decades[tmpl_decade] && year_tooltip_user != user_name">{{
+                                    user_decades[tmpl_decade]['total'] }}</span>
+                            </div>
+                        </div>
+                        <div class="text-center w-full mt-2 ">
+                            <span class="w-3 h-3 inline-block mr-2"
+                                :style="{ background: colorFromName[user_name] }"></span>
+                            {{ user_name }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <Bubble :options="decadeTrendOptions" :data="barFor(collect(fixedDecades), '# of songs')" /> -->
             </div>
         </div>
 
@@ -185,6 +251,7 @@ import _ from 'lodash'
 import { collect } from 'collect.js'
 
 import colors from 'tailwindcss/colors'
+import { ref } from 'vue';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement, PointElement)
 defaults.color = colors.neutral[400]
@@ -226,6 +293,20 @@ let votesTotal = 0;
 let masterListTotal = 0;
 let bangersTotal = 0;
 
+let decade_lower_bound = 9999;
+let decade_upper_bound = 0;
+let period_max_z = 0;
+let all_track_years = [];
+
+let period_length = 1;
+const year_tooltip_user = ref(null);
+const year_tooltip_message = ref(null);
+
+function setYearToolTip(user, decade, year, amount) {
+    year_tooltip_user.value = user;
+    year_tooltip_message.value = `${amount} tracks in ${decade + year}`;
+}
+
 for (const track of props.tracks) {
     votesForUsers.items[nameFromId[track.added_by]] += track.votes?.length
     for (const voter of track.votes) {
@@ -243,17 +324,37 @@ for (const track of props.tracks) {
     }
     // add decade
     var item = decadesForUsers.items[nameFromId[track.added_by]]
-    const decade = track.year - (track.year % 5)
+    const decade = track.year - (track.year % 10)
+    const period = track.year - (track.year % period_length) - decade
     if (item[decade] == null) {
-        item[decade] = 1
+        item[decade] = { [period]: 1, total: 1 }
+    } else if (item[decade][period] == null) {
+        item[decade][period] = 1
+        item[decade]['total'] += 1
     } else {
-        item[decade] += 1
+        item[decade][period] += 1
+        item[decade]['total'] += 1
+        period_max_z = Math.max(period_max_z, item[decade][period])
     }
+    decade_lower_bound = Math.min(decade_lower_bound, decade)
+    decade_upper_bound = Math.max(decade_upper_bound, decade)
+
+    all_track_years.push(track.year);
 }
 
+// Find most popular year
+const most_popular_year = collect(all_track_years).mode()[0];
+const most_popular_year_percent = collect(all_track_years).countBy().all()[most_popular_year] / all_track_years.length;
 
-console.log(decadesForUsers.items)
-
+// Compile decades for chart
+var decades = [];
+for (let index = decade_lower_bound; index <= decade_upper_bound; index += 10) {
+    decades.push(index);
+}
+var periods = [];
+for (let index = 0; index < 10; index += period_length) {
+    periods.push(index);
+}
 
 // Change into [{x: name, y: votes}, ...] format
 votesForUsers = votesForUsers.map((v, i) => ({ x: i, y: v, backgroundColor: colorFromName[i] })).values().sortByDesc('y')
@@ -262,22 +363,22 @@ listForUsers = listForUsers.map((v, i) => ({ x: i, y: v, backgroundColor: colorF
 bangersForUsers = bangersForUsers.map((v, i) => ({ x: i, y: v, backgroundColor: colorFromName[i] })).values().sortByDesc('y')
 // decadesForUsers = decadesForUsers.map((v, i) => ({ x: i, y: v, backgroundColor: colorFromName[i] })).values().sortByDesc('y')
 
-var fixedDecades = []
-var uCount = 0
-for (const u in decadesForUsers.items) {
-    for (const decade in decadesForUsers.items[u]) {
-        fixedDecades.push({
-            x: uCount,
-            y: decade, 
-            r: decadesForUsers.items[u][decade] * 3,
-            name: u,
-            backgroundColor: colorFromName[u]
-        })
-    }
-    uCount++
-}
+// var fixedDecades = []
+// var uCount = 0
+// for (const u in decadesForUsers.items) {
+//     for (const decade in decadesForUsers.items[u]) {
+//         fixedDecades.push({
+//             x: uCount,
+//             y: decade, 
+//             r: decadesForUsers.items[u][decade] * 3,
+//             name: u,
+//             backgroundColor: colorFromName[u]
+//         })
+//     }
+//     uCount++
+// }
 
-console.log(fixedDecades)
+console.log(decadesForUsers.items)
 
 function barFor(items, label) {
     return {
@@ -306,23 +407,23 @@ function pieFor(items, label) {
 }
 
 const decadeTrendOptions = {
-  scales: {
-    x: {
-      ticks: {
-        callback: function(value, index, ticks) {
-          return props.group_users[index].name
-        }
-      }
-    },
-    y: {
-      ticks: {
-        callback: function(value, index, ticks) {
-          return value
+    scales: {
+        x: {
+            ticks: {
+                callback: function (value, index, ticks) {
+                    return props.group_users[index].name
+                }
+            }
         },
-        padding: 16,
-      },
+        y: {
+            ticks: {
+                callback: function (value, index, ticks) {
+                    return value
+                },
+                padding: 16,
+            },
+        }
     }
-  }
 }
 
 
