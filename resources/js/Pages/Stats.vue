@@ -8,11 +8,11 @@
             :season_id="props.season_id" class="pt-2 border-t border-zinc-700" />
 
         <!-- Main Grid -->
-        <div class="grid items-end grid-cols-1 sm:grid-cols-2 gap-2 mt-8">
+        <div class="grid items-stretch grid-cols-1 sm:grid-cols-2 gap-2 mt-8">
             <div class="pb-4 pt-20">
                 <h1 class="text-5xl">Votes</h1>
             </div>
-            <div class="pb-4">
+            <div class="pb-4 flex items-end">
                 <table class="w-full datatable">
                     <tbody>
                         <tr>
@@ -44,11 +44,11 @@
             </div>
             <div class="tile">
                 <h2>Total Votes Recieved</h2>
-                <Bar :data="barFor(votesForUsers, '# of votes')" />
+                <Bar :options="barOptions" :data="barFor(votesForUsers, '# of votes')" />
             </div>
             <div class="tile">
                 <h2>Total Votes Cast</h2>
-                <Bar :data="barFor(castsForUsers, '# of votes')" />
+                <Bar :options="barOptions" :data="barFor(castsForUsers, '# of votes')" />
             </div>
             <div class="tile">
                 <h2>Share of Votes Recieved</h2>
@@ -61,7 +61,7 @@
             <div class="pb-4 pt-36">
                 <h1 class="text-5xl">Playlists</h1>
             </div>
-            <div class="pb-4">
+            <div class="pb-4 flex items-end">
                 <table class="w-full datatable">
                     <tbody>
                         <tr>
@@ -95,11 +95,11 @@
             </div>
             <div class="tile">
                 <h2>Songs in Masterlist</h2>
-                <Bar :data="barFor(listForUsers, '# of songs')" />
+                <Bar :options="barOptions"  :data="barFor(listForUsers, '# of songs')" />
             </div>
             <div class="tile">
                 <h2>Certified Bangers</h2>
-                <Bar :data="barFor(bangersForUsers, '# of songs')" />
+                <Bar :options="barOptions"  :data="barFor(bangersForUsers, '# of songs')" />
             </div>
             <div class="tile">
                 <h2>Share of Masterlist</h2>
@@ -112,7 +112,7 @@
             <div class="pb-4 pt-36">
                 <h1 class="text-5xl">Trends</h1>
             </div>
-            <div class="pb-4">
+            <div class="pb-4 flex items-end">
                 <table class="w-full datatable">
                     <tbody>
                         <tr>
@@ -182,6 +182,51 @@
 
                 <!-- <Bubble :options="decadeTrendOptions" :data="barFor(collect(fixedDecades), '# of songs')" /> -->
             </div>
+            <div class="tile">
+                <h2>Top Artists</h2>
+                <table class="w-full datatable">
+                    <tbody>
+                        <tr v-for="row,i in props.top_artists" :class="{
+                            'text-3xl': i == 0,
+                            'text-2xl': i == 1,
+                            'text-xl': i == 2,
+                            'text-lg': i == 3,
+                        }">
+                            <td>
+                                <span>{{ row.artist }}</span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ row['COUNT(*)'] }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tile">
+                <h2>Top Albums</h2>
+                <div class="flex w-full flex-wrap">
+                    <div v-for="row, i in props.top_albums" class="p-1 relative" :class="{
+                        'w-1/2': i <= 1,
+                        'w-1/3': i >= 2 && i <= 4,
+                        'w-1/4': i >= 5 
+                    }">
+                        <img class="aspect-square bg-zinc-700" :src="row.album_cover" alt="">
+                        <div class="absolute inset-0 p-2 text-[7pt] opacity-0 transition-opacity hover:opacity-100 bg-zinc-800/80 text-white overflow-hidden flex justify-end flex-col">
+                            <div class="line-clamp-1 text-primary tracking-wider uppercase text-[6pt]">
+                                {{ row['COUNT(*)'] }} Tracks
+                            </div>
+                            <div class="font-bold line-clamp-2">
+                                {{ row.album }}
+                            </div>
+                            <div class="line-clamp-2">
+                                {{ row.artist }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </AuthenticatedLayout>
@@ -194,6 +239,10 @@
     h2 {
         @apply text-lg font-medium pb-3 mb-3 border-b border-zinc-700;
     }
+}
+
+.tile .datatable td>span {
+        @apply bg-zinc-800;
 }
 
 .datatable {
@@ -221,6 +270,11 @@
         >span {
             @apply pl-2 font-mono;
         }
+    }
+
+    tr {
+        position: relative;
+        vertical-align: bottom;
     }
 
     tr:before {
@@ -252,6 +306,7 @@ import { collect } from 'collect.js'
 
 import colors from 'tailwindcss/colors'
 import { ref } from 'vue';
+import { RectangleStackIcon } from '@heroicons/vue/20/solid';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement, PointElement)
 defaults.color = colors.neutral[400]
@@ -268,6 +323,8 @@ const props = defineProps({
     tracks: Array,
     group_users: Array,
     group: Object,
+    top_artists: Array,
+    top_albums: Array,
 })
 
 let nameFromId = collect(props.group_users).mapWithKeys(u => [u.spotify_id, u.name]).items
@@ -395,6 +452,17 @@ const donutOptions = {
     borderColor: colors.zinc[800]
 }
 
+const barOptions = {
+    scaleShowValues: true,
+    scales: {
+        x: {
+            ticks: {
+                autoSkip: false
+            }
+        }
+    }
+}
+
 function pieFor(items, label) {
     return {
         labels: items.pluck('x').items,
@@ -403,26 +471,6 @@ function pieFor(items, label) {
             data: items.pluck('y').items,
             backgroundColor: items.pluck('backgroundColor').items,
         }]
-    }
-}
-
-const decadeTrendOptions = {
-    scales: {
-        x: {
-            ticks: {
-                callback: function (value, index, ticks) {
-                    return props.group_users[index].name
-                }
-            }
-        },
-        y: {
-            ticks: {
-                callback: function (value, index, ticks) {
-                    return value
-                },
-                padding: 16,
-            },
-        }
     }
 }
 
