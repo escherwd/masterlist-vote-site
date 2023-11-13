@@ -41,6 +41,7 @@
                     </div>
                 </a>
             </div>
+            <div v-else class="flex-1"></div>
             <div class="flex pt-4 sm:pt-0 sm:flex-0 sm:gap-3 justify-evenly sm:justify-end">
                 <a target="_blank" :href="`https://open.spotify.com/track/${track.track_id}`"
                     class="flex justify-center transition text-white/20 hover:text-green-500 border-r sm:border-none w-full border-zinc-700 h-7 sm:h-6">
