@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\TrackController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,9 @@ Route::middleware('auth')->group(function () {
     # Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     # Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/dashboard', [DashboardController::class, 'view'])->name('dashboard');
+    Route::get('/track/{submission}', [TrackController::class, 'view'])->name('track');
+    Route::get('/artist_img/{track}', [TrackController::class, 'artistImage'])->name('artistImage');
+    Route::get('/score/{artist}/{album}', [TrackController::class, 'albumScore'])->name('userScore');
     Route::get('/history/{season?}', [HistoryController::class, "view"])->name('history');
     Route::get('/stats/{season?}/{episode?}', [StatsController::class, "view"])->name('stats');
 });

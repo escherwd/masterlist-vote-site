@@ -4,6 +4,10 @@ body {
 
 .card-label {
     @apply text-xs text-primary mb-[3px] tracking-wider;
+
+    &.muted {
+        @apply text-white/60;
+    }
 }
 
 .ellipsis {
@@ -33,5 +37,18 @@ body {
 
     &.selected {
         @apply text-black/90 bg-primary hover:bg-primary/80;
+    }
+}
+
+.fadein {
+    animation: fadein 250ms linear;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }
