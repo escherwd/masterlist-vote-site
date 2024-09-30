@@ -25,7 +25,8 @@ class User extends Authenticatable
         'spotify_id',
         'spotify_token',
         'spotify_refresh_token',
-        'spotify_avatar'
+        'spotify_avatar',
+        'verified'
     ];
 
     /**

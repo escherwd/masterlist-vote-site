@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/auth/redirect', [SpotifyLoginController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/callback', [SpotifyLoginController::class, 'callback'])->name('auth.callback');
 
+// new accounts must enter access code
+Route::get('/access', [SpotifyLoginController::class, 'callback'])->name('auth.callback');
+
 Route::middleware('guest')->group(function () {
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
@@ -26,6 +29,9 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('access', [SpotifyLoginController::class, 'access'])->name('access.show');
+    Route::post('access', [SpotifyLoginController::class, 'submitAccess'])->name('access.submit');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');

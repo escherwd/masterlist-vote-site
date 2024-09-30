@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\VoteController;
+use App\Http\Middleware\EnsureUserIsVerified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth')->prefix('api')->group(function () {
+Route::middleware(['auth','verified'])->prefix('api')->group(function () {
     Route::post('/vote', [VoteController::class, 'store'])->name('vote.store');
     Route::post('/episode/{id}/refresh', [EpisodeController::class, 'refreshTracks'])->name('episode.refresh');
     Route::post('/episode/{id}/finish', [EpisodeController::class, 'finishEpisode'])->name('episode.finish');
