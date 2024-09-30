@@ -39,9 +39,6 @@ class SpotifyLoginController extends Controller
 
         Auth::login($user);
 
-        // Attach to first group for now
-        Group::first()->users()->sync($user, false);
-
         return redirect('/');
     }
 
@@ -65,11 +62,12 @@ class SpotifyLoginController extends Controller
             // Password is correct, verify the user
             $user->verified = true;
             $user->save();
+
+            // Attach to the first group (the only group for now)
+            Group::first()->users()->sync($user, false);
             return redirect('dashboard');
         } else {
             return redirect()->route('access.show')->with('error', 'Incorrect');
         }
-
-        
     }
 }
