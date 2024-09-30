@@ -48,9 +48,9 @@
                     <IconSpotify />
                 </a>
                 <a target="_blank"
-                    :href="`https://www.deezer.com/search/${encodeURIComponent(`${track.title} - ${track.artist}`)}`"
-                    class="flex justify-center transition text-white/20 hover:text-purple-500 border-r sm:border-none w-full border-zinc-700 h-7 sm:h-6">
-                    <IconDeezer />
+                    :href="`https://listen.tidal.com/search?q=${encodeURIComponent(`${track.artist} ${track.title}`)}`"
+                    class="flex justify-center transition text-white/20 hover:text-yellow-500 border-r sm:border-none w-full border-zinc-700 h-7 sm:h-6">
+                    <IconTidal />
                 </a>
                 <a target="_blank"
                     :href="`https://music.apple.com/us/search?term=${encodeURIComponent(`${track.title} - ${track.artist}`)}`"
@@ -119,12 +119,12 @@ import { ArrowUpRightIcon, CheckIcon, StarIcon, XMarkIcon } from '@heroicons/vue
 import { Head } from '@inertiajs/vue3';
 import UserRow from '@/Components/UserRow.vue';
 import IconSpotify from "@/Components/IconSpotify.vue";
-import IconDeezer from '@/Components/IconDeezer.vue';
 import IconApple from '@/Components/IconApple.vue';
 import IconLastfm from '@/Components/IconLastfm.vue';
 import { ref } from 'vue';
 import { onMounted } from 'vue';
 import axios from 'axios';
+import IconTidal from '@/Components/IconTidal.vue';
 
 const scores = ref([])
 const extras = ref({})
