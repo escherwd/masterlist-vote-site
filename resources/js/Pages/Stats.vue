@@ -234,15 +234,15 @@
 
 <style lang="scss" scoped>
 .tile {
-    @apply p-3 bg-zinc-800;
+    @apply p-3 bg-zinc-800 light:bg-neutral-100;
 
     h2 {
-        @apply text-lg font-medium pb-3 mb-3 border-b border-zinc-700;
+        @apply text-lg font-medium pb-3 mb-3 border-b border-zinc-700 light:border-neutral-200;
     }
 }
 
 .tile .datatable td>span {
-        @apply bg-zinc-800;
+        @apply bg-zinc-800 light:bg-neutral-100;
 }
 
 .datatable {
@@ -255,13 +255,13 @@
     list-style: none;
 
     td>span {
-        @apply bg-zinc-900;
+        @apply bg-zinc-900 light:bg-neutral-50;
         position: relative;
         z-index: 1;
     }
 
     td:first-of-type>span {
-        @apply pr-2 text-white/70;
+        @apply pr-2 text-white/70 light:text-neutral-600;
     }
 
     td:last-of-type {
@@ -278,7 +278,7 @@
     }
 
     tr:before {
-        @apply text-white/40;
+        @apply text-white/40 light:text-neutral-300;
         content:
             ". . . . . . . . . . . . . . . . . . . . "
             ". . . . . . . . . . . . . . . . . . . . "

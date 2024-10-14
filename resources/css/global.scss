@@ -1,12 +1,17 @@
 body {
     @apply bg-zinc-900 text-white/80;
+
+    &.light-mode {
+        @apply bg-neutral-50 text-neutral-600;
+    }
+    
 }
 
 .card-label {
-    @apply text-xs text-primary mb-[3px] tracking-wider;
+    @apply text-xs text-primary mb-[3px] tracking-wider light:text-secondary light:font-medium;
 
     &.muted {
-        @apply text-white/60;
+        @apply text-white/60 light:text-neutral-400;
     }
 }
 
@@ -15,7 +20,7 @@ body {
 }
 
 .divider {
-    @apply h-px w-full border-b border-dashed border-zinc-600;
+    @apply h-px w-full border-b border-dashed border-zinc-600 light:border-neutral-300;
 }
 
 .button {
@@ -32,11 +37,11 @@ body {
     }
 
     &.unselected {
-        @apply hover:text-white text-white/50 bg-zinc-800;
+        @apply hover:text-white text-white/50 bg-zinc-800 light:bg-neutral-100 light:text-neutral-600 light:hover:bg-neutral-200;
     }
 
     &.selected {
-        @apply text-black/90 bg-primary hover:bg-primary/80;
+        @apply text-black/90 bg-primary hover:bg-primary/80 light:bg-secondary light:text-white/90 light:hover:bg-secondary/80;
     }
 }
 

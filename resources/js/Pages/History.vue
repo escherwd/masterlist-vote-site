@@ -9,12 +9,12 @@
         <!-- episodes -->
         <div class="mt-6">
             <div v-for="episode of episodes">
-                <div class="bg-zinc-800 text-white/80 py-4 px-4 flex items-center gap-2 mt-4">
-                    <div class="font-condensed text-4xl font-normal text-white/60 pr-2">
-                        S{{ episode.season.number.toString().padStart(2,'0') }}:<span class="text-white">E{{ episode.number.toString().padStart(2,'0') }}</span>
+                <div class="bg-zinc-800 light:bg-neutral-100 text-white/80 light:text-neutral-600 py-4 px-4 flex items-center gap-2 mt-4">
+                    <div class="font-condensed text-4xl font-normal text-white/60 light:text-neutral-400 pr-2">
+                        S{{ episode.season.number.toString().padStart(2,'0') }}:<span class="text-white light:text-neutral-600">E{{ episode.number.toString().padStart(2,'0') }}</span>
                     </div>
                     <div class="flex-1">
-                        <div class="text-xs text-white/60">Season {{ episode.season.number }}</div>
+                        <div class="text-xs text-white/60 light:text-neutral-400">Season {{ episode.season.number }}</div>
                         <h3 class="text-sm">Episode {{ episode.number }}</h3>
                     </div>
                     <div>
@@ -24,11 +24,11 @@
                         {{ DateTime.fromISO(episode.created_at).toFormat("LLL dd, yyyy") }}
                     </div>
                 </div>
-                <div v-if="episode.theme" class="px-4 pb-3 bg-zinc-800">
+                <div v-if="episode.theme" class="px-4 pb-3 bg-zinc-800 light:bg-neutral-100">
                     <div class="card-label">THEME</div>
                     <p>{{ episode.theme }}</p>
                 </div>
-                <div class=" bg-gradient-to-b from-zinc-800 to-zinc-900 px-4">
+                <div class=" bg-gradient-to-b from-zinc-800 to-zinc-900 light:from-neutral-100 light:to-neutral-50 px-4">
                     <template v-for="track of episode.submissions">
                     <Track historical :track="track" :vote_count="track.votes?.length ?? 0"
                         :vote_max="vote_max_for(episode)" :vote_threshold="episode.vote_min"

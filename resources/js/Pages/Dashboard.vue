@@ -25,28 +25,28 @@
                 </div>
             </div>
             <div class="flex-grow-0 min-w-0 flex-shrink-0 w-full md:w-64 ">
-                <div class="grid grid-cols-2 gap-2">
-                    <div class="bg-zinc-800 py-3 px-4 col-span-2">
+                <div class="grid grid-cols-2 gap-2 light:text-neutral-600">
+                    <div class="bg-zinc-800 light:bg-neutral-100 py-3 px-4 col-span-2">
                         <div class="card-label">JURY</div>
                         <div class=" font-medium">{{ group.name }}</div>
                     </div>
-                    <div class="bg-zinc-800 py-3 px-4">
+                    <div class="bg-zinc-800 light:bg-neutral-100 py-3 px-4">
                         <div class="card-label">SEASON</div>
                         <div class="font-mono text-2xl">{{ `${season.number}`.padStart(2, '0') }}</div>
                     </div>
-                    <div class="bg-zinc-800 py-3 px-4">
+                    <div class="bg-zinc-800 light:bg-neutral-100 py-3 px-4">
                         <div class="card-label">EPISODE</div>
                         <div class="font-mono text-2xl">{{ `${episode.number}`.padStart(2, '0') }}</div>
                     </div>
-                    <div class="bg-zinc-800 py-4 px-4 col-span-2">
+                    <div class="bg-zinc-800 light:bg-neutral-100 py-4 px-4 col-span-2">
                         <div class="card-label">THEME</div>
                         <textarea
-                            class="leading-snug text-white/60 w-full bg-transparent resize-none p-0 border-0 m-0 focus:outline-primary focus:ring-0"
+                            class="leading-snug text-white/60 light:text-neutral-600 w-full bg-transparent resize-none p-0 border-0 m-0 focus:outline-primary focus:ring-0"
                             v-model="editEpisode.theme" placeholder="No Theme Yet." name="episode_theme" rows="2"
                             @keydown.enter.native.prevent="themeSubmit">
 
                         </textarea>
-                        <div class="text-xs text-white/30 italic">
+                        <div class="text-xs text-white/30 light:text-neutral-400 italic">
                             <span v-if="themeNeedsSave" class="animate-pulse">hit enter to save</span>
                             <span v-else>click to edit</span>
                         </div>
@@ -55,30 +55,30 @@
 
                 <div class="divider my-4"></div>
 
-                <div class="grid grid-cols-2 gap-2">
-                    <div class="bg-zinc-800 py-3 px-4">
+                <div class="grid grid-cols-2 gap-2 light:text-neutral-600">
+                    <div class="bg-zinc-800 light:bg-neutral-100 py-3 px-4">
                         <div class="card-label">APPROVED</div>
                         <div class="font-mono text-2xl">
                             <span>{{ accepted_songs_count }}</span>
-                            <span class="text-base text-white/60">/{{ submissions.length }}</span>
+                            <span class="text-base text-white/60 light:text-neutral-400">/{{ submissions.length }}</span>
                         </div>
                     </div>
-                    <div class="bg-zinc-800 py-3 px-4">
+                    <div class="bg-zinc-800 light:bg-neutral-100 py-3 px-4">
                         <div class="card-label">BANGERS</div>
                         <div class="font-mono text-2xl">{{ bangers_count }}</div>
                     </div>
-                    <div class="bg-zinc-800 py-3 px-4 col-span-2">
+                    <div class="bg-zinc-800 light:bg-neutral-100 py-3 px-4 col-span-2">
                         <div class="card-label">TOP TRACKS</div>
                         <div class="mt-3">
                             <div v-for="track, idx in leaderboard" :key="track.id"
-                                class="flex py-1 gap-2 border-b items-center border-zinc-700 last:border-none">
-                                <div class="w-6 h-6 bg-slate-700">
+                                class="flex py-1 gap-2 border-b items-center border-zinc-700 light:border-neutral-200 last:border-none">
+                                <div class="w-6 h-6 bg-slate-700 light:bg-neutral-200">
                                     <img :src="track.album_cover" alt="">
                                 </div>
                                 <div class="flex-1 text-sm font-medium min-w-0 ellipsis">
                                     {{ track.title }}
                                 </div>
-                                <div class="font-mono text-xs font-semibold text-primary">
+                                <div class="font-mono text-xs font-semibold text-primary light:text-secondary">
                                     {{ track.votes }} VOTES
                                 </div>
                             </div>
@@ -87,18 +87,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-zinc-800 py-3 px-4 col-span-2">
+                    <div class="bg-zinc-800 light:bg-neutral-100 py-3 px-4 col-span-2">
                         <div class="card-label">TOP VOTERS</div>
-                        <div class="mt-3">
+                        <div class="mt-3 light:text-neutral-600">
                             <div v-for="voter, idx in user_leaderboard" :key="voter.id"
-                                class="flex py-1 gap-2 border-b items-center border-zinc-700 last:border-none">
-                                <div class="w-6 h-6 bg-slate-700 rounded-full overflow-hidden">
+                                class="flex py-1 gap-2 border-b items-center border-zinc-700 light:border-neutral-200 last:border-none">
+                                <div class="w-6 h-6 bg-slate-700 light:bg-neutral-200 rounded-full overflow-hidden">
                                     <img v-if="voter.spotify_avatar" :src="voter.spotify_avatar" alt="">
                                 </div>
                                 <div class="flex-1 text-sm font-medium min-w-0 ellipsis">
                                     {{ voter.name }}
                                 </div>
-                                <div class="font-mono text-xs font-semibold text-primary">
+                                <div class="font-mono text-xs font-semibold text-primary light:text-secondary">
                                     {{ voter.votes }} VOTES
                                 </div>
                             </div>
@@ -113,13 +113,13 @@
 
                 <div class="grid grid-cols-2 gap-2">
                     <button @click="refreshTracks"
-                        class="col-span-2 button w-full bg-primary hover:bg-primary/80 text-black/90">
+                        class="col-span-2 button w-full bg-primary hover:bg-primary/80 text-black/90 light:bg-secondary light:hover:bg-secondary/80 light:text-neutral-50/90">
                         <ArrowPathIcon :class="{ 'animate-spin': isRefreshing }" />
                         <span>Refresh Tracks</span>
                     </button>
 
                     <button @click="isFinishingSeason = false; showFinishEpisodeModal = true"
-                        class="col-span-2 button w-full bg-green-600 hover:bg-green-600/80">
+                        class="col-span-2 button w-full bg-green-600 hover:bg-green-600/80 light:bg-green-500 light:hover:bg-green-500/80 light:text-neutral-50/90">
                         <CheckIcon />
                         <span>Finish Episode</span>
                     </button>

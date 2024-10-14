@@ -21,3 +21,8 @@ createInertiaApp({
         color: '#4B5563',
     },
 });
+
+// Check for theme
+if (localStorage.getItem('theme') ===  'light') {
+    document.body.classList.add('light-mode');
+}
