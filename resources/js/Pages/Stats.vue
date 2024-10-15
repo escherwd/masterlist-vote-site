@@ -103,11 +103,11 @@
             </div>
             <div class="tile">
                 <h2>Share of Masterlist</h2>
-                <Doughnut :options="donutOptions" :data="pieFor(listForUsers, '# of songs')" />
+                <Doughnut class=" text-neutral-100" :options="donutOptions" :data="pieFor(listForUsers, '# of songs')" />
             </div>
             <div class="tile">
                 <h2>Share of Certified Bangers</h2>
-                <Doughnut :options="donutOptions" :data="pieFor(bangersForUsers, '# of songs')" />
+                <Doughnut class=" text-neutral-100" :options="donutOptions" :data="pieFor(bangersForUsers, '# of songs')" />
             </div>
             <div class="pb-4 pt-36">
                 <h1 class="text-5xl">Trends</h1>
@@ -137,11 +137,11 @@
                 <div class="relative">
                     <div class="absolute inset-0 flex justify-evenly">
                         <div v-for="(tmpl_decade) in decades"
-                            class="flex-1 border-r border-dashed border-zinc-700 last:border-none">
+                            class="flex-1 border-r border-dashed border-zinc-700 light:border-neutral-200 last:border-none">
                         </div>
                     </div>
                     <div class="my-6 flex justify-evenly">
-                        <div v-for="(tmpl_decade) in decades" class="flex-1 text-center text-xs text-white/60">
+                        <div v-for="(tmpl_decade) in decades" class="flex-1 text-center text-xs text-white/60 light:text-neutral-400">
                             <span class="hidden sm:inline">{{ tmpl_decade }}s</span>
                             <span class="inline sm:hidden">'{{ (tmpl_decade % 100).toString().padStart(2, '0') }}s</span>
                         </div>
@@ -149,7 +149,7 @@
                     <div v-for="(user_decades, user_name) in decadesForUsers.items" class="mb-5 z-10 relative">
                         <div class="flex w-full justify-evenly">
                             <div v-for="(tmpl_decade) in decades"
-                                class="flex-1 flex justify-evenly border-b border-zinc-700">
+                                class="flex-1 flex justify-evenly border-b border-zinc-700 light:border-neutral-200">
                                 <div v-if="user_decades[tmpl_decade]" v-for="tmpl_period in periods"
                                     class="flex-1 h-12 relative">
                                     <div v-if="user_decades[tmpl_decade][tmpl_period]"
@@ -162,12 +162,12 @@
                             </div>
                         </div>
                         <div v-if="year_tooltip_user == user_name"
-                            class="w-full mt-2 absolute text-xs uppercase tracking-wide text-white/60 text-center">
+                            class="w-full mt-2 absolute text-xs uppercase tracking-wide text-white/60 light:text-neutral-400 text-center">
                             {{ year_tooltip_message }}
                         </div>
                         <div class="flex w-full justify-evenly mt-2 h-3">
                             <div v-for="(tmpl_decade) in decades"
-                                class="flex-1 text-center font-mono text-xs text-white/60">
+                                class="flex-1 text-center font-mono text-xs text-white/60  light:text-neutral-400">
                                 <span v-if="user_decades[tmpl_decade] && year_tooltip_user != user_name">{{
                                     user_decades[tmpl_decade]['total'] }}</span>
                             </div>
@@ -448,8 +448,10 @@ function barFor(items, label) {
 }
 
 const donutOptions = {
-    borderWidth: 3,
-    borderColor: colors.zinc[800]
+    // borderWidth: 3,
+    // borderColor: colors.zinc[800]
+    spacing: 3,
+    borderColor: colors.transparent
 }
 
 const barOptions = {

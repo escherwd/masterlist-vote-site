@@ -22,7 +22,3 @@ createInertiaApp({
     },
 });
 
-// Check for theme
-if (localStorage.getItem('theme') ===  'light') {
-    document.body.classList.add('light-mode');
-}
