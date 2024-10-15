@@ -25,7 +25,6 @@ class StatsController extends Controller
         $value = Cache::get($reqKey);
         if ($value) {
             // Render straight from cache
-            echo "hit cache";
             return Inertia::render('Stats', $value);
         }
 
