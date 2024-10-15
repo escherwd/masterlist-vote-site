@@ -5,8 +5,8 @@
 
         <!-- season picker -->
         <div class="flex items-center flex-col gap-y-2 md:flex-row no-scrollbar min-w-0">
-            <div class="flex-1 w-full overflow-scroll scroll no-scrollbar min-w-0">
-                <SeasonPicker :seasons="seasons" :season_id="season_id" slug="history" />
+            <div class="flex-1 w-full overflow-hidden min-w-0">
+                <SeasonPicker class="w-full" :seasons="seasons" :season_id="season_id" slug="history" />
             </div>
             <div class="w-full md:w-64">
                 <form @submit.prevent="submitSearch">
