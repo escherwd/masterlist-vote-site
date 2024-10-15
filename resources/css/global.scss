@@ -4,7 +4,16 @@ body {
     &.light-mode {
         @apply bg-neutral-50 text-neutral-600;
     }
-    
+
+    --actualPrimary: var(--primary);
+}
+
+.light-mode * {
+    --actualPrimary: var(--secondary);
+}
+
+* {
+    @apply transition-colors;
 }
 
 .card-label {
@@ -41,7 +50,7 @@ body {
     }
 
     &.selected {
-        @apply text-black/90 bg-primary hover:bg-primary/80 light:bg-secondary light:text-white/90 light:hover:bg-secondary/80;
+        @apply text-black/90 bg-primary hover:opacity-80 light:bg-secondary light:text-white/90;
     }
 }
 

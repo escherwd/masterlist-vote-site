@@ -19,8 +19,8 @@ export default {
                 condensed: ['Sofia Sans Extra Condensed', ...defaultTheme.fontFamily.mono]
             },
             colors: {
-                primary: colors.yellow[400],
-                secondary: colors.orange[500]
+                primary: `var(--primary)`,//colors.yellow[400],
+                secondary: `var(--secondary)`//colors.orange[500]
             }
         },
     },

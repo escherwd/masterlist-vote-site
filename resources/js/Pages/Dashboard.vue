@@ -136,7 +136,7 @@ import { ArrowPathIcon, CheckIcon } from "@heroicons/vue/20/solid"
 import { FaceFrownIcon } from '@heroicons/vue/24/solid'
 import FinishEpisodeModal from "@/Components/FinishEpisodeModal.vue";
 import { watch } from 'vue';
-import DashboardInfoPanels from './DashboardInfoPanels.vue'
+import DashboardInfoPanels from '../Components/DashboardInfoPanels.vue'
 
 const user = usePage().props.auth.user;
 

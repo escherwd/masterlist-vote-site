@@ -1,58 +1,12 @@
 <script setup>
 
+import ThemeControls from '@/Components/ThemeControls.vue';
 import { Link } from '@inertiajs/vue3';
-import { SunIcon, MoonIcon, ComputerDesktopIcon } from "@heroicons/vue/20/solid"
-import { ref } from 'vue';
-
-// const isLightTheme = localStorage.getItem('theme') == 'light'
-const theme = ref(localStorage.getItem('theme') ?? 'auto')
-
-const systemDark = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-
-// Check for theme on page load
-if (theme.value === 'light' || (theme.value === 'auto' && !systemDark())) {
-    document.body.classList.add('light-mode');
-}
-
-const setAutoTheme = () => {
-    if (systemDark())
-        document.body.classList.remove('light-mode')
-    else
-        document.body.classList.add('light-mode')
-}
-
-const cycleTheme = () => {
-
-    switch (theme.value) {
-        case 'dark': // go from dark to auto
-            setAutoTheme()
-            theme.value = 'auto'
-            localStorage.setItem('theme', 'auto')
-            break;
-        case 'auto': // go from auto to light
-            document.body.classList.add('light-mode')
-            theme.value = 'light'
-            localStorage.setItem('theme', 'light')
-            break;
-        case 'light': // go from light to dark
-            document.body.classList.remove('light-mode')
-            theme.value = 'dark'
-            localStorage.setItem('theme', 'dark')
-            break;
-        default:
-            break;
-    }
-}
-
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) { 
-    if (theme.value === 'auto') {
-        setAutoTheme()
-    }
- })
 
 </script>
 
 <template>
+    <div class="fixed z-10 w-full h-full bg-primary light:bg-secondary opacity-[0.04] light:opacity-[0.02] pointer-events-none"></div>
     <div class="min-h-screen px-4 max-w-3xl w-full min-w-0 relative z-0 mx-auto light:text-neutral-600 text-white/80">
         <!-- Header -->
         <div class="pt-6 pb-5">
@@ -66,12 +20,8 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
                 </div>
                 <div class="h-px flex-grow border-b border-dashed border-zinc-600 light:border-neutral-300"></div>
                 <div>
-
-                    <a href="#" @click="cycleTheme" class="text-primary light:text-secondary hover:underline">
-                        <MoonIcon v-if="theme == 'light'" class="h-4 w-4 inline-block" />
-                        <ComputerDesktopIcon v-else-if="theme == 'auto'" class="h-4 w-4 inline-block" />
-                        <SunIcon v-else class="h-4 w-4 inline-block" />
-                    </a>
+                    <ThemeControls />
+                    
                     <span class="mx-2">/</span>
                     <Link as="button" class=" text-primary light:text-secondary hover:underline" method="post"
                         :href="route('logout')">
