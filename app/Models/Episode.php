@@ -13,9 +13,14 @@ class Episode extends Model
 
     protected $guarded = [];
 
+    static public $searchQuery = null;
+
     public function submissions(): HasMany
     {
-        return $this->hasMany(Submission::class)->orderBy('order');
+        return $this->hasMany(Submission::class)->when($this::$searchQuery, function ($q, $term) {
+            return $q->where('title', 'like', "%{$term}%")
+                ->orWhere('artist', 'like', "%{$term}%");
+        })->orderBy('order');
     }
 
     public function season(): BelongsTo
@@ -30,7 +35,7 @@ class Episode extends Model
         $votes = Vote::whereIn('submission_id', $trackIds)->get();
 
         // Organize by [<track_id> => [<user_id>, <user_id>, <user_id>]]
-        
+
         $grouped = [];
         foreach ($trackIds as $trackId) {
             // Populate all tracks with empty lists
@@ -43,5 +48,4 @@ class Episode extends Model
 
         return $grouped;
     }
-
 }

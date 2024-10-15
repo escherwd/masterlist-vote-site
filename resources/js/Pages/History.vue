@@ -4,7 +4,17 @@
     <AuthenticatedLayout>
 
         <!-- season picker -->
-        <SeasonPicker :seasons="seasons" :season_id="season_id" slug="history" />
+        <div class="flex items-center flex-col gap-y-2 md:flex-row min-w-0">
+            <div class="flex-1 w-full overflow-scroll scrollbar-hidden-x min-w-0">
+                <SeasonPicker :seasons="seasons" :season_id="season_id" slug="history" />
+            </div>
+            <div class="w-full md:w-64">
+                <form @submit.prevent="submitSearch">
+                    <input class="w-full h-9 !ring-primary light:!ring-secondary !border-zinc-700 light:!border-neutral-200 bg-zinc-800 light:bg-neutral-100 text-white/80 light:text-neutral-600" type="text" placeholder="Search..." v-model="searchForm.query">
+                </form>
+            </div>
+        </div>
+        
 
         <!-- episodes -->
         <div class="mt-6">
@@ -45,11 +55,12 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
 import Track from '@/Components/Track.vue';
 import { DateTime } from 'luxon'
 import { CalendarIcon, ClockIcon } from '@heroicons/vue/20/solid';
 import SeasonPicker from '../Components/SeasonPicker.vue'
+import { reactive, ref } from 'vue';
 
 const user = usePage().props.auth.user;
 
@@ -58,8 +69,25 @@ const props = defineProps({
     season_id: String,
     episodes: Array,
     group: Object,
-    group_users: Array
+    group_users: Array,
+    query: String
 })
+
+const searchForm = useForm({
+  query: props.query,
+})
+
+function submitSearch() {
+    // searchForm.post('/dashboard', {
+    //     preserveState: false
+    // })
+    // router.post('/dashboard',searchForm)
+    router.visit(props.season_id ? `/history/${props.season_id}` : `/history`, {
+        data: {
+            q: searchForm.query
+        }
+    })
+}
 
 function vote_max_for(episode) {
 

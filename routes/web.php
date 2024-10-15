@@ -39,6 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/artist_img/{track}', [TrackController::class, 'artistImage'])->name('artistImage');
     Route::get('/score/{artist}/{album}', [TrackController::class, 'albumScore'])->name('userScore');
     Route::get('/history/{season?}', [HistoryController::class, "view"])->name('history');
+    Route::post('/history/{season?}', [HistoryController::class, "view"])->name('historySearch');
     Route::get('/stats/{season?}/{episode?}', [StatsController::class, "view"])->name('stats');
 });
 

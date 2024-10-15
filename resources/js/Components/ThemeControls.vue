@@ -15,14 +15,14 @@ const colorTheme = ref(localStorage.getItem('colorTheme') ?? 'default')
 
 const colorThemes = {
 	"default": [colors.yellow[400], colors.orange[500]],
-	"pink": [colors.pink[400], colors.pink[500]],
-	"blue": [colors.blue[400], colors.blue[500]],
-	"green": [colors.green[400], colors.green[500]],
-	"purple": [colors.purple[400], colors.purple[500]],
-	"teal": [colors.teal[400], colors.teal[500]],
+	"pink": [colors.pink[400], colors.pink[600]],
+	"blue": [colors.blue[300], colors.blue[600]],
+	"green": [colors.green[400], colors.green[600]],
+	"purple": [colors.purple[400], colors.purple[600]],
+	"teal": [colors.teal[400], colors.teal[600]],
 	"red": [colors.red[400], colors.red[500]],
-	"fuchsia": [colors.fuchsia[400], colors.fuchsia[500]],
-	"indigo": [colors.indigo[400], colors.indigo[500]],
+	"fuchsia": [colors.fuchsia[300], colors.fuchsia[600]],
+	"indigo": [colors.indigo[300], colors.indigo[600]],
 	"bw": [colors.white, colors.black],
 }
 
@@ -102,9 +102,9 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
 		<a href="#" @click="cycleColorTheme"
 			class="inline-block h-[14px] w-[24px] mr-2 -mb-[3px] rounded-full bg-primary light:bg-secondary border-zinc-600 light:border-neutral-200"></a>
 		<a href="#" @click="cycleTheme" class="text-primary light:text-secondary hover:underline">
-			<MoonIcon v-if="theme == 'light'" class="h-4 w-4 inline-block" />
+			<SunIcon v-if="theme == 'light'" class="h-4 w-4 inline-block" />
 			<ComputerDesktopIcon v-else-if="theme == 'auto'" class="h-4 w-4 inline-block" />
-			<SunIcon v-else class="h-4 w-4 inline-block" />
+			<MoonIcon v-else class="h-4 w-4 inline-block" />
 		</a>
 	</span>
 </template>
