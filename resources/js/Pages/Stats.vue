@@ -338,6 +338,9 @@ let colorFromName = collect(props.group_users).map((u, i) => ({
         colors.blue[500],
         colors.violet[600],
         colors.pink[500],
+        colors.teal[500],
+        colors.emerald[500],
+        colors.lime[500],
     ][i]
 })).mapWithKeys(u => [u.name, u.color]).items
 let votesForUsers = collect(props.group_users).mapWithKeys(u => [u.name, 0])
