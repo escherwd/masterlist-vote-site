@@ -8,6 +8,16 @@
             :counts="[accepted_songs_count, bangers_count, submissions.length]" @close="showFinishEpisodeModal = false"
             :finish_season="isFinishingSeason" />
 
+        <div class="block w-full md:hidden mb-4">
+            <DashboardInfoPanels :group="group" :season="season" :episode="episode" :themeSubmit="themeSubmit" :editEpisode="editEpisode" :themeNeedsSave="themeNeedsSave" />
+            <div class="border-b flex items-end w-full pt-8 pb-2 text-xl font-medium border-zinc-700 light:border-neutral-200 border-solid">
+                <span class="flex-1">Tracks</span>
+                <div class="text-sm font-normal text-white/50 light:text-neutral-400">
+                    12
+                </div>
+            </div>
+        </div>
+
         <div class="flex flex-col md:flex-row items-start gap-x-4 w-full relative gap-y-12">
             <div class="flex-1 min-w-0 max-w-full w-full">
                 <template v-for="track in submissions">
@@ -25,35 +35,10 @@
                 </div>
             </div>
             <div class="flex-grow-0 min-w-0 flex-shrink-0 w-full md:w-64 ">
-                <div class="grid grid-cols-2 gap-2 light:text-neutral-600">
-                    <div class="bg-zinc-800 light:bg-neutral-100 py-3 px-4 col-span-2">
-                        <div class="card-label">JURY</div>
-                        <div class=" font-medium">{{ group.name }}</div>
-                    </div>
-                    <div class="bg-zinc-800 light:bg-neutral-100 py-3 px-4">
-                        <div class="card-label">SEASON</div>
-                        <div class="font-mono text-2xl">{{ `${season.number}`.padStart(2, '0') }}</div>
-                    </div>
-                    <div class="bg-zinc-800 light:bg-neutral-100 py-3 px-4">
-                        <div class="card-label">EPISODE</div>
-                        <div class="font-mono text-2xl">{{ `${episode.number}`.padStart(2, '0') }}</div>
-                    </div>
-                    <div class="bg-zinc-800 light:bg-neutral-100 py-4 px-4 col-span-2">
-                        <div class="card-label">THEME</div>
-                        <textarea
-                            class="leading-snug text-white/60 light:text-neutral-600 w-full bg-transparent resize-none p-0 border-0 m-0 focus:outline-primary focus:ring-0"
-                            v-model="editEpisode.theme" placeholder="No Theme Yet." name="episode_theme" rows="2"
-                            @keydown.enter.native.prevent="themeSubmit">
 
-                        </textarea>
-                        <div class="text-xs text-white/30 light:text-neutral-400 italic">
-                            <span v-if="themeNeedsSave" class="animate-pulse">hit enter to save</span>
-                            <span v-else>click to edit</span>
-                        </div>
-                    </div>
-                </div>
+                <DashboardInfoPanels class="hidden md:grid" :group="group" :season="season" :episode="episode" :themeSubmit="themeSubmit" :editEpisode="editEpisode" :themeNeedsSave="themeNeedsSave" />
 
-                <div class="divider my-4"></div>
+                <div class="hidden md:block divider my-4"></div>
 
                 <div class="grid grid-cols-2 gap-2 light:text-neutral-600">
                     <div class="bg-zinc-800 light:bg-neutral-100 py-3 px-4">
@@ -151,6 +136,7 @@ import { ArrowPathIcon, CheckIcon } from "@heroicons/vue/20/solid"
 import { FaceFrownIcon } from '@heroicons/vue/24/solid'
 import FinishEpisodeModal from "@/Components/FinishEpisodeModal.vue";
 import { watch } from 'vue';
+import DashboardInfoPanels from './DashboardInfoPanels.vue'
 
 const user = usePage().props.auth.user;
 

@@ -5,7 +5,7 @@
 
         <SeasonPicker slug="stats" :seasons="props.seasons" :season_id="props.season_id" />
         <EpisodePicker v-if="season_id" slug="stats" :episodes="props.episodes" :episode_id="props.episode_id"
-            :season_id="props.season_id" class="pt-2 border-t border-zinc-700" />
+            :season_id="props.season_id" class="pt-2 border-t border-zinc-700 light:border-neutral-200" />
 
         <!-- Main Grid -->
         <div class="grid items-stretch grid-cols-1 sm:grid-cols-2 gap-2 mt-8">
