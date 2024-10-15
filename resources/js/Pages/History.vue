@@ -4,8 +4,8 @@
     <AuthenticatedLayout>
 
         <!-- season picker -->
-        <div class="flex items-center flex-col gap-y-2 md:flex-row min-w-0">
-            <div class="flex-1 w-full overflow-scroll scrollbar-hidden-x min-w-0">
+        <div class="flex items-center flex-col gap-y-2 md:flex-row no-scrollbar min-w-0">
+            <div class="flex-1 w-full overflow-scroll scroll no-scrollbar min-w-0">
                 <SeasonPicker :seasons="seasons" :season_id="season_id" slug="history" />
             </div>
             <div class="w-full md:w-64">
