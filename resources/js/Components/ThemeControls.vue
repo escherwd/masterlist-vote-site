@@ -49,7 +49,6 @@ const cycleColorTheme = () => {
 	setColorTheme()
 }
 
-
 const systemDark = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
 
 // Check for theme on page load

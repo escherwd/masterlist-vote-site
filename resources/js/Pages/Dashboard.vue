@@ -26,11 +26,11 @@
                         :voted="(votes[track.id] ?? []).includes(user.id)" :user="user_for_spotify(track.added_by)"
                         :voters="votes[track.id].map(v => user_for_id(v))" @vote="vote" />
                 </template>
-                <div v-if="submissions.length == 0" class="text-center py-8 text-white/40 uppercase text-sm tracking-wider">
+                <div v-if="submissions.length == 0" class="text-center py-8 text-white/40 light:text-neutral-400 uppercase text-sm tracking-wider">
                     <FaceFrownIcon :class="{ 'animate-pulse': isRefreshing }" class="h-6 w-6 mx-auto" />
                     <span class="block mt-2">No submissions yet.</span>
                     <button @click="refreshTracks"
-                        class="block mt-2 uppercase text-xs tracking-wide font-medium hover:text-white mx-auto">Refresh
+                        class="block mt-2 uppercase text-xs tracking-wide font-medium light:hover:text-neutral-300 hover:text-white mx-auto">Refresh
                         Tracks</button>
                 </div>
             </div>
@@ -110,7 +110,7 @@
                     </button>
 
                     <div @click="isFinishingSeason = true; showFinishEpisodeModal = true"
-                        class="col-span-2 p-2 text-center text-sm text-white/60">
+                        class="col-span-2 p-2 text-center text-sm light:text-neutral-400 text-white/60">
                         <button class="hover:underline">
                             Finish Season
                         </button>

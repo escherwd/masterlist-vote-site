@@ -105,6 +105,7 @@ class FinishEpisode extends Command
 
         // Ensure no error
         if (isset($response["error"])) {
+            dd($response["error"]);
             throw $response["error"];
         }
     }
@@ -113,11 +114,12 @@ class FinishEpisode extends Command
         $response = Http::withHeaders([
             "Authorization" => "Bearer " . $token,
         ])->acceptJson()->delete('https://api.spotify.com/v1/playlists/' . $id . '/tracks', [
-            "uris" => $track_ids
+            "tracks" => array_map(fn ($id) => [ "uri" => $id ], $track_ids) 
         ])->json();
 
         // Ensure no error
         if (isset($response["error"])) {
+            dd($response["error"]);
             throw $response["error"];
         }
     }
